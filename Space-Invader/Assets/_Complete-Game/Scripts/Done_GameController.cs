@@ -2,6 +2,12 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
+// for the Websocket
+using System;
+using System.Text;
+using System.Threading;
+using System.Net.WebSockets;
+using Random=UnityEngine.Random;
 
 public class Done_GameController : MonoBehaviour
 {
@@ -20,6 +26,26 @@ public class Done_GameController : MonoBehaviour
     private bool restart;
     private int score;
 
+    // WebSocket configuration
+    Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
+    ClientWebSocket cws = null;
+    ArraySegment<byte> buf = new ArraySegment<byte>(new byte[1024]);
+
+    async void Connect()
+    {
+        cws = new ClientWebSocket();
+        try
+        {
+            await cws.ConnectAsync(u, CancellationToken.None);
+            if (cws.State == WebSocketState.Open) Debug.Log("connected");
+            // SayHello();
+            // GetStuff();
+            turnOffREDLED();
+        }
+        catch (Exception e) { Debug.Log("woe " + e.Message); }
+    }
+
+
     void Start()
     {
         gameOver = false;
@@ -35,6 +61,7 @@ public class Done_GameController : MonoBehaviour
     {
         if (restart)
         {
+            
             if (Input.GetKeyDown(KeyCode.R))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -61,6 +88,8 @@ public class Done_GameController : MonoBehaviour
             {
                 restartText.text = "Press 'R' for Restart";
                 restart = true;
+                // send a message to the WebSocket to turn off the RED LED
+                Connect();
                 break;
             }
         }
@@ -81,5 +110,13 @@ public class Done_GameController : MonoBehaviour
     {
         gameOverText.text = "Game Over!";
         gameOver = true;
+    }
+
+    void  turnOffREDLED(){
+        // Set the message used to determine that the RED LED will be activated on the breadboard
+        ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Reset RED LED..."));
+        cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
+        Debug.Log("send msg");
+
     }
 }
