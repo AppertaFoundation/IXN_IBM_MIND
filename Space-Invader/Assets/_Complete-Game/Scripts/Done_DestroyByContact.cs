@@ -31,6 +31,20 @@ public class Done_DestroyByContact : MonoBehaviour
         catch (Exception e) { Debug.Log("woe " + e.Message); }
     }
 
+    // async void Connect2()
+    // {
+    //     cws = new ClientWebSocket();
+    //     try
+    //     {
+    //         await cws.ConnectAsync(u, CancellationToken.None);
+    //         if (cws.State == WebSocketState.Open) Debug.Log("connected");
+    //         // SayHello();
+    //         // GetStuff();
+    //         EnemyShotSignal();
+    //     }
+    //     catch (Exception e) { Debug.Log("woe " + e.Message); }
+    // }
+
 
 	void Start ()
 	{
@@ -76,4 +90,14 @@ public class Done_DestroyByContact : MonoBehaviour
         cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
         Debug.Log("send msg");
 	}
+
+
+    // void EnemyShotSignal(){
+    //     // Set the message used to determine that the YELLOW LED will be activated on the breadboard
+    //     ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Enemy Shot..."));
+    //     cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
+    //     Debug.Log("send msg");
+    // }
+
+
 }
