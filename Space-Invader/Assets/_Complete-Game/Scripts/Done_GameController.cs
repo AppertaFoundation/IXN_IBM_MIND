@@ -41,6 +41,7 @@ public class Done_GameController : MonoBehaviour
             // SayHello();
             // GetStuff();
             turnOffREDLED();
+            turnOffBLUELED();
         }
         catch (Exception e) { Debug.Log("woe " + e.Message); }
     }
@@ -132,6 +133,14 @@ public class Done_GameController : MonoBehaviour
     void  turnOffREDLED(){
         // Set the message used to determine that the RED LED will be activated on the breadboard
         ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Reset RED LED..."));
+        cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
+        Debug.Log("send msg");
+
+    }
+
+    void  turnOffBLUELED(){
+        // Set the message used to determine that the RED LED will be activated on the breadboard
+        ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Reset BLUE LED..."));
         cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
         Debug.Log("send msg");
 
