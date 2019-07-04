@@ -21,12 +21,14 @@ public class Done_PlayerController : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.GetButton("Fire1") && Time.time > nextFire) 
+		// Input.GetButton("Fire1")
+		if (Input.GetKey (KeyCode.Space) && Time.time > nextFire)
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 			GetComponent<AudioSource>().Play ();
-		}
+		} 
+		
 	}
 
 	void FixedUpdate ()
