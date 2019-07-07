@@ -12,7 +12,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     [Header("Text Params")]
-    public Text scoreText;
+    public Text scoreText, speedText;
     public Text restartText;
     public Text gameOverText;
     // public GameObject exitButton;

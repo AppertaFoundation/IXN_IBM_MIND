@@ -21,10 +21,14 @@ public class Done_GameController : MonoBehaviour
     public Text scoreText;
     public Text restartText;
     public Text gameOverText;
+    public Text speedText;
 
     private bool gameOver;
     private bool restart;
     private int score;
+    private int speed;
+    
+
 
     // WebSocket configuration
     Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
@@ -54,7 +58,7 @@ public class Done_GameController : MonoBehaviour
             await cws.ConnectAsync(u, CancellationToken.None);
             if (cws.State == WebSocketState.Open) Debug.Log("connected");
             // SayHello();
-            // GetStuff();
+            GetStuff();
             EnemyShotSignal();
         }
         catch (Exception e) { Debug.Log("woe " + e.Message); }
@@ -69,6 +73,7 @@ public class Done_GameController : MonoBehaviour
         gameOverText.text = "";
         score = 0;
         UpdateScore();
+        UpdateSpeed(10);
         StartCoroutine(SpawnWaves());
     }
 
@@ -124,6 +129,16 @@ public class Done_GameController : MonoBehaviour
 
     }
 
+    public void AddSpeed(int newSpeedValue){
+        //speed += newSpeedValue;
+        UpdateSpeed(newSpeedValue);
+
+    }
+
+    public void UpdateSpeed(int s){
+        speedText.text = "Speed: " + s;
+    }
+
     public void GameOver()
     {
         gameOverText.text = "Game Over!";
@@ -151,5 +166,12 @@ public class Done_GameController : MonoBehaviour
         ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Enemy Shot..."));
         cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
         Debug.Log("send msg");
+    }
+
+     async void GetStuff()
+    {
+        WebSocketReceiveResult r = await cws.ReceiveAsync(buf, CancellationToken.None);
+        Debug.Log("Got: " + Encoding.UTF8.GetString(buf.Array, 0, r.Count));
+        GetStuff();
     }
 }

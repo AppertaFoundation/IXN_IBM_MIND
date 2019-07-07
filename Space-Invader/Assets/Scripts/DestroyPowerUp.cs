@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Net.WebSockets;
 using Random=UnityEngine.Random;
+using System.Timers;
 
 // cont. https://www.youtube.com/watch?v=2KRLVRPdoKQ
 public class DestroyPowerUp : MonoBehaviour
 {
     public GameObject pickupEffect;
-    public int new_speed = 2;
+    private Done_GameController gameController;
+    private static System.Timers.Timer aTimer;
 
     // WebSocket configuration
     Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
@@ -32,6 +34,19 @@ public class DestroyPowerUp : MonoBehaviour
             SpeedUpSignal();
         }
         catch (Exception e) { Debug.Log("woe " + e.Message); }
+    }
+
+    private void Start()
+    {
+        GameObject gameControllerObject = GameObject.FindGameObjectWithTag("GameController");
+        if(gameControllerObject != null)
+        {
+            gameController = gameControllerObject.GetComponent<Done_GameController>();
+        }
+        else
+        {
+            Debug.Log("Cannot find 'GameController' script");
+        }
     }
 
 
@@ -70,7 +85,25 @@ public class DestroyPowerUp : MonoBehaviour
 
             // Apply effect to the player
             Done_PlayerController playerController = player.GetComponent<Done_PlayerController>();
-            playerController.speed *= new_speed;
+            playerController.speed += 10;
+
+            gameController.AddSpeed((int)playerController.speed);
+            Debug.Log((int)playerController.speed);
+
+
+            // Done_GameController gameController = player.GetComponent<Done_GameController>();
+            // gameController.UpdateSpeed((int)playerController.speed);
+
+            if(playerController.speed > 30){
+            	// System.Threading.Thread.Sleep(5000);
+            	// yield new WaitForSeconds(5);
+
+            	// aTimer = new System.Timers.Timer(5000);
+            	// Debug.Log("aTimer Output: " + aTimer);
+           
+            	// playerController.speed -= 10;
+
+            }
 
         }
 
@@ -79,4 +112,5 @@ public class DestroyPowerUp : MonoBehaviour
         cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
         Debug.Log("send msg");
     }
+
 }
