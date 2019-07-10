@@ -100,8 +100,9 @@ public class DestroyPowerUp : MonoBehaviour
 
             	// aTimer = new System.Timers.Timer(5000);
             	// Debug.Log("aTimer Output: " + aTimer);
-           
-            	// playerController.speed -= 10;
+                Debug.Log("Player Score > 30");
+            	playerController.speed -= 10;
+                gameController.UpdateSpeed((int)playerController.speed);
 
             }
 

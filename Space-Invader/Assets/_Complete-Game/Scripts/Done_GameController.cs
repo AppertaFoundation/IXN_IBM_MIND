@@ -76,8 +76,6 @@ public class Done_GameController : MonoBehaviour
         UpdateSpeed(10);
         StartCoroutine(SpawnWaves());
 
-
-
     }
 
     void Update()
@@ -180,7 +178,10 @@ public class Done_GameController : MonoBehaviour
         Done_PlayerController playerController = GetComponent<Done_PlayerController>();
         if(Encoding.UTF8.GetString(buf.Array, 0, r.Count).Equals("Reducing Speed...")){
             Debug.Log("Reduce by 10");
-            // playerController.speed -= 10;
+            if(playerController != null){
+                playerController.speed -= 10;
+            }
+            
         }
     }
 }
