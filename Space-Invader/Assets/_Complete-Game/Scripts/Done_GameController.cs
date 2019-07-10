@@ -75,6 +75,9 @@ public class Done_GameController : MonoBehaviour
         UpdateScore();
         UpdateSpeed(10);
         StartCoroutine(SpawnWaves());
+
+
+
     }
 
     void Update()
@@ -172,6 +175,12 @@ public class Done_GameController : MonoBehaviour
     {
         WebSocketReceiveResult r = await cws.ReceiveAsync(buf, CancellationToken.None);
         Debug.Log("Got: " + Encoding.UTF8.GetString(buf.Array, 0, r.Count));
-        GetStuff();
+
+         // Apply effect to the player
+        Done_PlayerController playerController = GetComponent<Done_PlayerController>();
+        if(Encoding.UTF8.GetString(buf.Array, 0, r.Count).Equals("Reducing Speed...")){
+            Debug.Log("Reduce by 10");
+            // playerController.speed -= 10;
+        }
     }
 }

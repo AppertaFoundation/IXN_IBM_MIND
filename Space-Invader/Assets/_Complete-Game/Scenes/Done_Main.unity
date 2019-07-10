@@ -1614,7 +1614,7 @@ MonoBehaviour:
   scoreText: {fileID: 330698628}
   restartText: {fileID: 1118447433}
   gameOverText: {fileID: 1018459434}
-  speedText: {fileID: 0}
+  speedText: {fileID: 1285548795}
 --- !u!4 &1904691132
 Transform:
   m_ObjectHideFlags: 0

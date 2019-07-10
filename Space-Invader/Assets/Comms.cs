@@ -23,7 +23,7 @@ public class Comms : MonoBehaviour
             await cws.ConnectAsync(u, CancellationToken.None);
             if (cws.State == WebSocketState.Open) Debug.Log("connected");
             SayHello();
-            GetStuff();
+            // GetStuff();
         }
         catch (Exception e) { Debug.Log("woe " + e.Message); }
     }
@@ -39,6 +39,8 @@ public class Comms : MonoBehaviour
     {
         WebSocketReceiveResult r = await cws.ReceiveAsync(buf, CancellationToken.None);
         Debug.Log("Got: " + Encoding.UTF8.GetString(buf.Array, 0, r.Count));
-        GetStuff();
+        // GetStuff();
+        
+
     }
 }
