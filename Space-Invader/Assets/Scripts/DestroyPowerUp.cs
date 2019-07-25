@@ -94,13 +94,13 @@ public class DestroyPowerUp : MonoBehaviour
             // Done_GameController gameController = player.GetComponent<Done_GameController>();
             // gameController.UpdateSpeed((int)playerController.speed);
 
-            if(playerController.speed > 30){
+            if(playerController.speed > 100){
             	// System.Threading.Thread.Sleep(5000);
             	// yield new WaitForSeconds(5);
 
             	// aTimer = new System.Timers.Timer(5000);
             	// Debug.Log("aTimer Output: " + aTimer);
-                Debug.Log("Player Score > 30");
+                Debug.Log("Player Score > 100");
             	playerController.speed -= 10;
                 gameController.UpdateSpeed((int)playerController.speed);
 
