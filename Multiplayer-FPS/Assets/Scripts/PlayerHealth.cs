@@ -5,6 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnitySampleAssets.Characters.FirstPerson;
 using System.Collections;
+using System;
+using System.Text;
+using System.Threading;
+using System.Net.WebSockets;
+
+
+
 
 [RequireComponent(typeof(FirstPersonController))]
 [RequireComponent(typeof(Rigidbody))]
@@ -48,6 +55,29 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     private bool isSinking;
     private bool damaged;
 
+
+    // WebSocket configuration
+    Uri u = new Uri("ws://169.254.243.241:1880/ws/simple");
+    ClientWebSocket cws = null;
+    ArraySegment<byte> buf = new ArraySegment<byte>(new byte[1024]);
+
+
+    async void Connect()
+    {
+        cws = new ClientWebSocket();
+        try
+        {
+            await cws.ConnectAsync(u, CancellationToken.None);
+            if (cws.State == WebSocketState.Open) Debug.Log("connected");
+            // SayHello();
+            // GetStuff();
+            PlayerDamagedSignal();
+        }
+        catch (Exception e) { Debug.Log("woe " + e.Message); }
+    }
+
+
+
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
@@ -73,6 +103,8 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         if (damaged) {
             damaged = false;
             damageImage.color = flashColour;
+
+            Connect();
         } else {
             damageImage.color = Color.Lerp(damageImage.color, Color.clear, flashSpeed * Time.deltaTime);
         }
@@ -156,5 +188,15 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             currentHealth = (int)stream.ReceiveNext();
         }
     }
+
+
+    void PlayerDamagedSignal()
+    {
+        // Set the message used to determine that the RED LED will be activated on the breadboard
+        ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Player damaged..."));
+        cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
+        Debug.Log("send msg");
+    }
+
 
 }
