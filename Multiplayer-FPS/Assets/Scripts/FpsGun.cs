@@ -1,15 +1,20 @@
-﻿using Photon.Pun;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnitySampleAssets.CrossPlatformInput;
 using System.Collections;
+using System;
+using System.Text;
+using System.Threading;
+using System.Net.WebSockets;
+
 
 public class FpsGun : MonoBehaviour {
 
     [SerializeField]
     private int damagePerShot = 20;
     [SerializeField]
-    private float timeBetweenBullets = 0.2f;
+    private float timeBetweenBullets = 0.5f;
     [SerializeField]
     private float weaponRange = 100.0f;
     [SerializeField]
@@ -24,6 +29,28 @@ public class FpsGun : MonoBehaviour {
     private Camera raycastCamera;
 
     private float timer;
+
+    // WebSocket configuration
+    Uri u = new Uri("ws://169.254.243.241:1880/ws/simple");
+    ClientWebSocket cws = null;
+    ArraySegment<byte> buf = new ArraySegment<byte>(new byte[1024]);
+
+
+    async void Connect()
+    {
+        cws = new ClientWebSocket();
+        try
+        {
+            await cws.ConnectAsync(u, CancellationToken.None);
+            if (cws.State == WebSocketState.Open) Debug.Log("connected");
+            // SayHello();
+            // GetStuff();
+            PlayerShootSignal();
+        }
+        catch (Exception e) { Debug.Log("woe " + e.Message); }
+    }
+
+
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -73,6 +100,9 @@ public class FpsGun : MonoBehaviour {
                     break;
             }
         }
+        //shoot event
+        Connect();
+
         tpsGun.RPCShoot();  // RPC for third person view
     }
 
@@ -84,6 +114,16 @@ public class FpsGun : MonoBehaviour {
         yield return new WaitForSeconds(0.05f);
         gunLine.enabled = false;
     }
+
+
+    void PlayerShootSignal()
+    {
+        // Set the message used to determine that the RED LED will be activated on the breadboard
+        ArraySegment<byte> b = new ArraySegment<byte>(Encoding.UTF8.GetBytes("Player Shoot!"));
+        cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
+        Debug.Log("send msg");
+    }
+
 
 }
 
