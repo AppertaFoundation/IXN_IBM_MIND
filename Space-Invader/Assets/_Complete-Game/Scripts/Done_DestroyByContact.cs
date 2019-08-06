@@ -13,7 +13,7 @@ public class Done_DestroyByContact : MonoBehaviour
 	private Done_GameController gameController;
 
 	// WebSocket configuration
-	Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
+	Uri u = new Uri("ws://169.254.221.231:1880/ws/simple"); 
 	ClientWebSocket cws = null;
     ArraySegment<byte> buf = new ArraySegment<byte>(new byte[1024]);
 
