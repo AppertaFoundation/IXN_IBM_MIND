@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Comms : MonoBehaviour
 {
-    Uri u = new Uri("ws://169.254.221.231:1880/ws/simple"); 
+    Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
     // Uri u = new Uri("ws://redify.eu-gb.mybluemix.net/ws/simple");
     // Uri u = new Uri("ws://communicationibm.eu-gb.mybluemix.net/ws/simple");
    

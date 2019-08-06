@@ -18,7 +18,7 @@ public class DestroyPowerUp : MonoBehaviour
     private static System.Timers.Timer aTimer;
 
     // WebSocket configuration
-    Uri u = new Uri("ws://169.254.221.231:1880/ws/simple"); 
+    Uri u = new Uri("ws://169.254.243.241:1880/ws/simple"); 
     ClientWebSocket cws = null;
     ArraySegment<byte> buf = new ArraySegment<byte>(new byte[1024]);
 
@@ -35,6 +35,7 @@ public class DestroyPowerUp : MonoBehaviour
         }
         catch (Exception e) { Debug.Log("woe " + e.Message); }
     }
+
 
     private void Start()
     {
@@ -97,7 +98,6 @@ public class DestroyPowerUp : MonoBehaviour
             if(playerController.speed > 100){
             	// System.Threading.Thread.Sleep(5000);
             	// yield new WaitForSeconds(5);
-
             	// aTimer = new System.Timers.Timer(5000);
             	// Debug.Log("aTimer Output: " + aTimer);
                 Debug.Log("Player Score > 100");
@@ -113,5 +113,6 @@ public class DestroyPowerUp : MonoBehaviour
         cws.SendAsync(b, WebSocketMessageType.Text, true, CancellationToken.None);
         Debug.Log("send msg");
     }
+
 
 }
