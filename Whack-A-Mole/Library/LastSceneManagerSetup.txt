@@ -1,0 +1,5 @@
+sceneSetups:
+- path: Assets/WAMAssets/CS_Assets/CS_Scenes/WAMStartMenu.unity
+  isLoaded: 1
+  isActive: 1
+  isSubScene: 0
